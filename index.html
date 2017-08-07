@@ -36,17 +36,20 @@
                     $pokemonList.append($pokemonListItem);
                 }) 
             });
-
             
 
             let getPokemonListElem = pokemonData => {
                 return $(`
                     <li id="pokemon-id-${pokemonData.id}">
-                        <a href="javascript:void(0);" onclick="fetchPokemonDetails(${pokemonData.id})"> 
-                            <img src=${pokemonData.icon_url}> <br>
-                            ${pokemonData.id}. ${pokemonData.name}
-                        </a>
+                        <img src=${pokemonData.icon_url}> <br>
+                        <p>${pokemonData.id}. ${pokemonData.name}</p>
+                        <button type="button" onclick="fetchPokemonDetails(${pokemonData.id})">Get Stats</button>
+
                         <p id="pokemon-details-${pokemonData.id}"></p>
+                        <form method="post" enctype="multipart/form-data">
+                            <input type="file" name="imgfile"><br>
+                            <input type="submit" name="submit" value="upload">
+                        </form>
                     </li>
                 `)
             }
