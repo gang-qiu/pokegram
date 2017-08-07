@@ -2,24 +2,37 @@
 <html>
 <head>
     <title>Picture Uploader</title>
+    <!-- load jquery -->
     <script
       src="http://code.jquery.com/jquery-2.2.4.min.js"
       integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
       crossorigin="anonymous"></script>
+
     <style> 
+    /* display the list of pokemon as a left-floating field of tiles or thumbnails */
     ul#pokemon-list > li {list-style: none; float: left; padding: 20px;}
     </style>
 </head>
 <body>
     <h4>Pokegram! Instagram for Pokemon</h4>
-    <div id="pokemon-details"></div>
+
+    <!-- The thumbnails of each pokemon will be loaded dynamically in this unordered list -->
     <ul id="pokemon-list"></ul>
 
+    <!-- This is the main script -->
     <script>
+
+        // url taken from https://github.com/toddmotto/public-apis
         let POKEMON_API_URL = 'http://pokeapi.co/api/v2/pokemon/'; 
 
+        // function that fetches pokemon info upon clicking on "get stats" button
+        // this function needs to be declared outside of the jquery ready function
+        // because the thumbnails are generated dynamically and needs to reference
+        // an existing function
         var fetchPokemonDetails = pokemonId => {
             $.getJSON(POKEMON_API_URL + pokemonId, data => {
+
+                // we only display the height and weight
                 $(`#pokemon-details-${pokemonId}`).text(`
                     Hgt: ${data.height}, Wgt: ${data.weight}
                 `);
@@ -28,9 +41,11 @@
 
         $(() => {
             // immediately load pokemon data from api
-            $.getJSON("/api/picture", data => {
+            $.getJSON("/api/pokemon", data => {
                 let pokemonData = data;
                 let $pokemonList = $("#pokemon-list")
+
+                // generate a thumbnail for each pokemon
                 pokemonData.forEach(pokemon => {
                     $pokemonListItem = getPokemonListElem(pokemon);
                     $pokemonList.append($pokemonListItem);
@@ -39,6 +54,12 @@
             
 
             let getPokemonListElem = pokemonData => {
+                // each thumbnail is a <li> element with an image and a paragraph for names. 
+                // a button to fetch additional stats from the public API is also available
+                // an unimplemented button to upload photos for each pokemon is also available
+                // each thumbnail contains the id of the pokemon so it can be referenced in the appropriate callbacks
+                // for example, if I click on thumbnail 50 I want to fetch data only for pokemon 50. 
+
                 return $(`
                     <li id="pokemon-id-${pokemonData.id}">
                         <img src=${pokemonData.icon_url}> <br>
@@ -46,7 +67,7 @@
                         <button type="button" onclick="fetchPokemonDetails(${pokemonData.id})">Get Stats</button>
 
                         <p id="pokemon-details-${pokemonData.id}"></p>
-                        <form method="post" enctype="multipart/form-data">
+                        <form action="/api/picture" method="post" enctype="multipart/form-data">
                             <input type="file" name="imgfile"><br>
                             <input type="submit" name="submit" value="upload">
                         </form>
