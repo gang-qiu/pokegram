@@ -7,13 +7,25 @@
       integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
       crossorigin="anonymous"></script>
     <style> 
-    li {list-style: none; float: left;}
+    ul#pokemon-list > li {list-style: none; float: left; padding: 20px;}
     </style>
 </head>
 <body>
+    <h4>Pokegram! Instagram for Pokemon</h4>
+    <div id="pokemon-details"></div>
     <ul id="pokemon-list"></ul>
 
     <script>
+        let POKEMON_API_URL = 'http://pokeapi.co/api/v2/pokemon/'; 
+
+        var fetchPokemonDetails = pokemonId => {
+            $.getJSON(POKEMON_API_URL + pokemonId, data => {
+                $(`#pokemon-details-${pokemonId}`).text(`
+                    Hgt: ${data.height}, Wgt: ${data.weight}
+                `);
+            });
+        };
+
         $(() => {
             // immediately load pokemon data from api
             $.getJSON("/api/picture", data => {
@@ -25,14 +37,20 @@
                 }) 
             });
 
+            
+
             let getPokemonListElem = pokemonData => {
                 return $(`
                     <li id="pokemon-id-${pokemonData.id}">
-                        <a href="#"> <img src=${pokemonData.icon_url}> <br>
-                        ${pokemonData.id}. ${pokemonData.name}</a>
+                        <a href="javascript:void(0);" onclick="fetchPokemonDetails(${pokemonData.id})"> 
+                            <img src=${pokemonData.icon_url}> <br>
+                            ${pokemonData.id}. ${pokemonData.name}
+                        </a>
+                        <p id="pokemon-details-${pokemonData.id}"></p>
                     </li>
                 `)
             }
+
         });
     </script>
 </body>
