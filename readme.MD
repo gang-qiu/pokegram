@@ -9,7 +9,7 @@ Each of the original 151 pokemon are displayed with their photos in thumbnails.
 
 In a future implentation, their picture can be replaced with a newly uploaded picture. 
 
-![demo]()
+![pokegram](https://user-images.githubusercontent.com/5148889/29018255-7016bd02-7b28-11e7-9dd7-035213ea96b5.gif)
 
 ### NOTE
 The app is not working on AWS with `$ chalice deploy`
