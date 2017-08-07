@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Picture Uploader</title>
+    <script
+      src="http://code.jquery.com/jquery-2.2.4.min.js"
+      integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+      crossorigin="anonymous"></script>
+    <style> 
+    li {list-style: none; float: left;}
+    </style>
+</head>
+<body>
+    <ul id="pokemon-list"></ul>
+
+    <script>
+        $(() => {
+            // immediately load pokemon data from api
+            $.getJSON("/api/picture", data => {
+                let pokemonData = data;
+                let $pokemonList = $("#pokemon-list")
+                pokemonData.forEach(pokemon => {
+                    $pokemonListItem = getPokemonListElem(pokemon);
+                    $pokemonList.append($pokemonListItem);
+                }) 
+            });
+
+            let getPokemonListElem = pokemonData => {
+                return $(`
+                    <li id="pokemon-id-${pokemonData.id}">
+                        <a href="#"> <img src=${pokemonData.icon_url}> <br>
+                        ${pokemonData.id}. ${pokemonData.name}</a>
+                    </li>
+                `)
+            }
+        });
+    </script>
+</body>
+</html>
